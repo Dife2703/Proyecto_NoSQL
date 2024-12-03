@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gestión de Inventario</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Gestión de Inventario</h1>
+
+    <!-- Formulario de Producto -->
+    <div class="form-container">
+      <h2>Producto</h2>
+      <form id="producto-form">
+        <input type="text" id="producto-nombre" placeholder="Nombre del producto" required />
+        <input type="text" id="producto-numeroSerie" placeholder="Número de serie" required />
+        <input type="text" id="producto-categoria" placeholder="Categoría" required />
+        <input type="number" id="producto-precio" placeholder="Precio unitario" required />
+        <button type="submit">Crear Producto</button>
+      </form>
+      <div id="producto-list"></div>
+    </div>
+
+    <!-- Formulario de Tienda -->
+    <div class="form-container">
+        <h2>Tienda</h2>
+        <form id="tienda-form">
+            <input type="text" id="tienda-nombre" placeholder="Nombre de la tienda" required />
+            <input type="text" id="tienda-direccion" placeholder="Dirección" required />
+            <input type="text" id="tienda-ciudad" placeholder="Ciudad" required />
+            <input type="text" id="tienda-codigoPostal" placeholder="Código Postal" />
+            <input type="number" id="tienda-capacidad" placeholder="Capacidad de almacenamiento" />
+            <input type="text" id="tienda-horarioOperacion" placeholder="Horario de operación" />
+            <button type="submit">Crear Tienda</button>
+        </form>
+        <div id="tienda-list"></div>
+    </div>
+
+    <!-- Formulario de Inventario -->
+    <div class="form-container">
+        <h2>Inventario</h2>
+        <form id="inventario-form">
+            <input type="text" id="inventario-productoId" placeholder="ID Producto" required />
+            <input type="text" id="inventario-tiendaId" placeholder="ID Tienda" required />
+            <input type="number" id="inventario-cantidad" placeholder="Cantidad" required />
+            <input type="number" id="inventario-nivelAlerta" placeholder="Nivel de alerta de reposición" />
+            <button type="submit">Agregar al Inventario</button>
+        </form>
+        <div id="inventario-list"></div>
+    </div>
+
+    <!-- Formulario de Cliente -->
+    <div class="form-container">
+      <h2>Cliente</h2>
+      <form id="cliente-form">
+        <input type="text" id="cliente-nombre" placeholder="Nombre del cliente" required />
+        <input type="text" id="cliente-direccionEnvio" placeholder="Dirección de envío" required />
+        <button type="submit">Crear Cliente</button>
+      </form>
+      <div id="cliente-list"></div>
+    </div>
+
+    <!-- Formulario de Devolución -->
+    <div class="form-container">
+      <h2>Devolución</h2>
+      <form id="devolucion-form">
+        <input type="text" id="devolucion-pedidoId" placeholder="ID Pedido" required />
+        <input type="text" id="devolucion-motivo" placeholder="Motivo de la devolución" required />
+        <input type="number" id="devolucion-cantidad" placeholder="Cantidad" required />
+        <button type="submit">Crear Devolución</button>
+      </form>
+      <div id="devolucion-list"></div>
+    </div>
+
+    <!-- Formulario de Pedido -->
+    <div class="form-container">
+        <h2>Pedido</h2>
+        <form id="pedido-form">
+            <input type="text" id="pedido-clienteId" placeholder="ID Cliente" required />
+            <input type="text" id="pedido-productoId" placeholder="ID Producto" required />
+            <input type="number" id="pedido-cantidad" placeholder="Cantidad" required />
+            <button type="submit">Crear Pedido</button>
+        </form>
+        <div id="pedido-list"></div>
+    </div>
+
+    <!-- Formulario de Proveedor -->
+    <div class="form-container">
+      <h2>Proveedor</h2>
+      <form id="proveedor-form">
+        <input type="text" id="proveedor-nombre" placeholder="Nombre del proveedor" required />
+        <input type="text" id="proveedor-direccion" placeholder="Dirección" required />
+        <input type="text" id="proveedor-contacto" placeholder="Contacto" required />
+        <button type="submit">Crear Proveedor</button>
+      </form>
+      <div id="proveedor-list"></div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
