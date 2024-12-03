@@ -20,20 +20,6 @@ const apiUrl = 'http://localhost:3000/api';  // Cambia esto a tu servidor de bac
 // Función para obtener productos
 // Obtener todos los productos
 async function obtenerProductos() {
-    const res = await fetch(`${apiUrl}/productos`);
-    const productos = await res.json();
-    const productoList = document.getElementById('producto-list');
-    productoList.innerHTML = '';
-    productos.forEach(producto => {
-      const div = document.createElement('div');
-      div.classList.add('list-item');
-      div.innerHTML = `
-        <strong>${producto.nombre}</strong> - ${producto.categoria} - $${producto.precioUnitario}
-        <button onclick="eliminarProducto('${producto._id}')">Eliminar</button>
-      `;
-      productoList.appendChild(div);
-    });
-  }
   const res = await fetch(`${apiUrl}/productos`);
   const productos = await res.json();
   const productoList = document.getElementById('producto-list');
@@ -311,7 +297,6 @@ document.getElementById('producto-form').addEventListener('submit', async (e) =>
     nombre: document.getElementById('producto-nombre').value,
     numeroSerie: document.getElementById('producto-numeroSerie').value,
     categoria: document.getElementById('producto-categoria').value,
-    precioUnitario: document.getElementById('producto-precio').value
     precioUnitario: document.getElementById('producto-precio').value,
     descripcion: document.getElementById('producto-descripcion').value,
     fechaCaducidad: document.getElementById('producto-fechaCaducidad').value,
