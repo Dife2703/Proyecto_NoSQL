@@ -18,6 +18,7 @@ const apiUrl = 'http://localhost:3000/api';  // Cambia esto a tu servidor de bac
 }*/
 
 // Función para obtener productos
+// Obtener todos los productos
 async function obtenerProductos() {
     const res = await fetch(`${apiUrl}/productos`);
     const productos = await res.json();
@@ -33,6 +34,25 @@ async function obtenerProductos() {
       productoList.appendChild(div);
     });
   }
+  const res = await fetch(`${apiUrl}/productos`);
+  const productos = await res.json();
+  const productoList = document.getElementById('producto-list');
+  productoList.innerHTML = '';  // Limpiamos la lista antes de agregar los nuevos elementos
+
+  productos.forEach(producto => {
+    const div = document.createElement('div');
+    div.classList.add('list-item');
+    
+    div.innerHTML = `
+      <strong>${producto.nombre}</strong> - ${producto.categoria} - $${producto.precioUnitario}
+      <br>Descripción: ${producto.descripcion || 'No disponible'}
+      <br>Fecha de Caducidad: ${producto.fechaCaducidad || 'No disponible'}
+      <br>Proveedor ID: ${producto.proveedorId ? producto.proveedorId.nombre : 'No disponible'}
+      <button onclick="eliminarProducto('${producto._id}')">Eliminar</button>
+    `;
+    productoList.appendChild(div);
+  });
+}
 
 
 
@@ -284,6 +304,7 @@ async function obtenerProveedores() {
 
 
 // Manejo de formularios de productos
+// Crear producto
 document.getElementById('producto-form').addEventListener('submit', async (e) => {
   e.preventDefault();
   const producto = {
@@ -291,7 +312,12 @@ document.getElementById('producto-form').addEventListener('submit', async (e) =>
     numeroSerie: document.getElementById('producto-numeroSerie').value,
     categoria: document.getElementById('producto-categoria').value,
     precioUnitario: document.getElementById('producto-precio').value
+    precioUnitario: document.getElementById('producto-precio').value,
+    descripcion: document.getElementById('producto-descripcion').value,
+    fechaCaducidad: document.getElementById('producto-fechaCaducidad').value,
+    proveedorId: document.getElementById('producto-proveedorId').value
   };
+
   await fetch(`${apiUrl}/productos`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },

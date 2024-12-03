@@ -11,17 +11,20 @@
     <h1>Gestión de Inventario</h1>
 
     <!-- Formulario de Producto -->
-    <div class="form-container">
-      <h2>Producto</h2>
-      <form id="producto-form">
-        <input type="text" id="producto-nombre" placeholder="Nombre del producto" required />
-        <input type="text" id="producto-numeroSerie" placeholder="Número de serie" required />
-        <input type="text" id="producto-categoria" placeholder="Categoría" required />
-        <input type="number" id="producto-precio" placeholder="Precio unitario" required />
-        <button type="submit">Crear Producto</button>
-      </form>
-      <div id="producto-list"></div>
-    </div>
+  <div class="form-container">
+    <h2>Producto</h2>
+    <form id="producto-form">
+      <input type="text" id="producto-nombre" placeholder="Nombre del producto" required />
+      <input type="text" id="producto-numeroSerie" placeholder="Número de serie" required />
+      <input type="text" id="producto-categoria" placeholder="Categoría" required />
+      <input type="number" id="producto-precio" placeholder="Precio unitario" required />
+      <textarea id="producto-descripcion" placeholder="Descripción del producto"></textarea>
+      <input type="date" id="producto-fechaCaducidad" placeholder="Fecha de caducidad" />
+      <input type="text" id="producto-proveedorId" placeholder="ID Proveedor" required />
+      <button type="submit">Crear Producto</button>
+    </form>
+    <div id="producto-list"></div>
+  </div>
 
     <!-- Formulario de Tienda -->
     <div class="form-container">
