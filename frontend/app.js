@@ -269,71 +269,92 @@ function limpiarFormulario(formId) {
 
 
 
-//APARTADO INVENTARIOS
-
-
+// APARTADO INVENTARIOS
 
 // Obtener todos los inventarios
 async function obtenerInventarios() {
-    const res = await fetch(`${apiUrl}/inventarios`);
-    const inventarios = await res.json();
-    const inventarioList = document.getElementById('inventario-list');
-    inventarioList.innerHTML = '';
-    
-    inventarios.forEach(inventario => {
-      const div = document.createElement('div');
-      div.classList.add('list-item');
-      div.innerHTML = `
-      Producto: ${inventario.productoId.nombre} | Tienda: ${inventario.tiendaId.nombre} (${inventario.tiendaId.ciudad}) 
-      | Cantidad: ${inventario.cantidad} | Nivel de Alerta: ${inventario.nivelAlerta}
-      <button onclick="eliminarInventario('${inventario._id}')">Eliminar</button>
-      <button onclick="cargarInventario('${inventario._id}')">Editar</button>
-    `;
-      inventarioList.appendChild(div);
-    });
-  }
-  
-// Crear / Editar Inventario  
+  try {
+      const res = await fetch(`${apiUrl}/inventarios`);
+      if (!res.ok) throw new Error('Error al obtener los inventarios');
+      
+      const inventarios = await res.json();
+      console.log(inventarios); // Verifica qué devuelve la API
+      
+      const inventarioList = document.getElementById('inventario-list');
+      inventarioList.innerHTML = ''; // Limpia la lista antes de agregar los elementos
 
+      if (Array.isArray(inventarios) && inventarios.length > 0) {
+          inventarios.forEach(inventario => {
+              const div = document.createElement('div');
+              div.classList.add('list-item');
+              div.innerHTML = `
+              Producto: ${inventario.productoId?.nombre || 'Desconocido'} | 
+              Tienda: ${inventario.tiendaId?.nombre || 'Sin tienda'} (${inventario.tiendaId?.ciudad || 'N/A'}) |
+              Cantidad: ${inventario.cantidad || 0} | 
+              Nivel de Alerta: ${inventario.nivelAlerta || 'Sin alerta'}
+              <button onclick="eliminarInventario('${inventario._id}')">Eliminar</button>
+              <button onclick="cargarInventario('${inventario._id}')">Editar</button>
+            `;
+              inventarioList.appendChild(div);
+          });
+      } else {
+          inventarioList.innerHTML = '<p>No hay inventarios disponibles.</p>';
+      }
+  } catch (error) {
+      console.error('Error al obtener inventarios:', error);
+  }
+}
+
+// Crear / Editar Inventario
 document.getElementById('inventario-form').addEventListener('submit', async (e) => {
   e.preventDefault();
 
   const inventario = {
-    productoId: document.getElementById('inventario-productoId').value,
-    tiendaId: document.getElementById('inventario-tiendaId').value,
-    cantidad: document.getElementById('inventario-cantidad').value,
-    nivelAlerta: document.getElementById('inventario-nivelAlerta').value,
+      productoId: document.getElementById('inventario-productoId').value,
+      tiendaId: document.getElementById('inventario-tiendaId').value,
+      cantidad: document.getElementById('inventario-cantidad').value,
+      nivelAlerta: document.getElementById('inventario-nivelAlerta').value,
   };
 
-  if (inventarioEnEdicion) {
-    await fetch(`${apiUrl}/inventarios/${inventarioEnEdicion}`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(inventario),
-    });
-    inventarioEnEdicion = null;
-  } else {
-    await fetch(`${apiUrl}/inventarios`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(inventario),
-    });
-  }
+  try {
+      if (inventarioEnEdicion) {
+          await fetch(`${apiUrl}/inventarios/${inventarioEnEdicion}`, {
+              method: 'PUT',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(inventario),
+          });
+          inventarioEnEdicion = null;
+      } else {
+          await fetch(`${apiUrl}/inventarios`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(inventario),
+          });
+      }
 
-  obtenerInventarios();
-  e.target.reset();
+      obtenerInventarios();
+      e.target.reset();
+  } catch (error) {
+      console.error('Error al guardar el inventario:', error);
+  }
 });
 
 async function cargarInventario(id) {
-  const res = await fetch(`${apiUrl}/inventarios/${id}`);
-  const inventario = await res.json();
+  try {
+      const res = await fetch(`${apiUrl}/inventarios/${id}`);
+      if (!res.ok) throw new Error('Error al cargar el inventario');
 
-  document.getElementById('inventario-productoId').value = inventario.productoId._id;
-  document.getElementById('inventario-tiendaId').value = inventario.tiendaId._id;
-  document.getElementById('inventario-cantidad').value = inventario.cantidad;
-  document.getElementById('inventario-nivelAlerta').value = inventario.nivelAlerta || '';
+      const inventario = await res.json();
 
-  inventarioEnEdicion = inventario._id;
+      document.getElementById('inventario-productoId').value = inventario.productoId?._id || '';
+      document.getElementById('inventario-tiendaId').value = inventario.tiendaId?._id || '';
+      document.getElementById('inventario-cantidad').value = inventario.cantidad || 0;
+      document.getElementById('inventario-nivelAlerta').value = inventario.nivelAlerta || '';
+
+      inventarioEnEdicion = inventario._id;
+  } catch (error) {
+      console.error('Error al cargar inventario:', error);
+  }
 }
 
 function cancelarEdicionInventario() {
@@ -342,9 +363,14 @@ function cancelarEdicionInventario() {
 }
 
 async function eliminarInventario(id) {
-  await fetch(`${apiUrl}/inventarios/${id}`, { method: 'DELETE' });
-  obtenerInventarios();
+  try {
+      await fetch(`${apiUrl}/inventarios/${id}`, { method: 'DELETE' });
+      obtenerInventarios();
+  } catch (error) {
+      console.error('Error al eliminar inventario:', error);
+  }
 }
+
 
 
 // APARTADO CLIENTES
@@ -418,9 +444,8 @@ async function obtenerClientes() {
     }
 
 
-// APARTADO DEVOLUCIONES
-
-// Obtener todas las devoluciones
+  //APARTADO DEVOLUCIONES
+  // Obtener todas las devoluciones
 async function obtenerDevoluciones() {
   const res = await fetch(`${apiUrl}/devoluciones`);
   const devoluciones = await res.json();
@@ -566,8 +591,9 @@ function cancelarEdicionPedido() {
     await fetch(`${apiUrl}/pedidos/${id}`, { method: 'DELETE' });
     obtenerPedidos();
   }
+  
 
-// APARTADO PROOVEDORES
+// APARTADO PROOVEDORES ORIGINAL
 
 // Obtener todos los proveedores
 async function obtenerProveedores() {
@@ -637,6 +663,8 @@ function cancelarEdicionProveedor() {
     await fetch(`${apiUrl}/proveedores/${id}`, { method: 'DELETE' });
     obtenerProveedores();
   }
+
+
 
 
 // Llamar a las funciones al cargar la página
