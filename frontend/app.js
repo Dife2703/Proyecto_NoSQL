@@ -460,7 +460,6 @@ async function obtenerDevoluciones() {
     const div = document.createElement('div');
     div.classList.add('list-item');
     div.innerHTML = `
-      Pedido ID: ${devolucion.pedidoId} | Motivo: ${devolucion.motivo} | Cantidad: ${devolucion.cantidad}
       Pedido ID: ${pedidoId} | Motivo: ${devolucion.motivo} | Cantidad: ${devolucion.cantidad}
       <button onclick="eliminarDevolucion('${devolucion._id}')">Eliminar</button>
       <button onclick="cargarDevolucion('${devolucion._id}')">Editar</button>
