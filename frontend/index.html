@@ -26,7 +26,7 @@
   </style>
 </head>
 <body>
-  <nav>
+  <nav >
     <button onclick="cambiarPagina('producto')">Producto</button>
     <button onclick="cambiarPagina('tienda')">Tienda</button>
     <button onclick="cambiarPagina('inventario')">Inventario</button>
@@ -37,8 +37,9 @@
   </nav>
 
   <!-- Página de Productos -->
+  
   <div id="producto" class="page active">
-    <h2>Producto</h2>
+    <h2 >Producto</h2>
     <form id="producto-form">
       <input type="text" id="producto-nombre" placeholder="Nombre del producto" required />
       <input type="text" id="producto-numeroSerie" placeholder="Número de serie" required />
@@ -54,6 +55,7 @@
   </div>
 
   <!-- Página de Tiendas -->
+  
   <div id="tienda" class="page">
     <h2>Tienda</h2>
     <form id="tienda-form">
@@ -70,6 +72,7 @@
   </div>
 
   <!-- Página de Inventarios -->
+  
   <div id="inventario" class="page">
     <h2>Inventario</h2>
     <form id="inventario-form">
@@ -84,6 +87,7 @@
   </div>
 
   <!-- Página de Clientes -->
+  
   <div id="cliente" class="page">
     <h2>Cliente</h2>
     <form id="cliente-form">
@@ -96,6 +100,7 @@
   </div>
 
   <!-- Página de Devoluciones -->
+  
   <div id="devolucion" class="page">
     <h2>Devolución</h2>
     <form id="devolucion-form">
@@ -109,8 +114,9 @@
   </div>
 
   <!-- Página de Pedidos -->
+ 
   <div id="pedido" class="page">
-    <h2>Pedido</h2>
+     <h2>Pedido</h2>
     <form id="pedido-form">
       <input type="text" id="pedido-clienteId" placeholder="ID Cliente" required />
       <input type="text" id="pedido-productoId" placeholder="ID Producto" required />
@@ -122,6 +128,7 @@
   </div>
 
   <!-- Página de Proveedores -->
+  
   <div id="proveedor" class="page">
     <h2>Proveedor</h2>
     <form id="proveedor-form">
@@ -136,11 +143,63 @@
 
   <script src="app.js"></script>
   <script>
+    // Escuchar eventos de formulario
+    document.addEventListener("DOMContentLoaded", () => {
+      // Productos
+      document.getElementById("producto-form").addEventListener("submit", function (e) {
+        e.preventDefault();
+        alert("¡Producto guardado exitosamente!");
+        this.reset(); // Limpiar el formulario
+      });
+  
+      // Tienda
+      document.getElementById("tienda-form").addEventListener("submit", function (e) {
+        e.preventDefault();
+        alert("¡Tienda guardada exitosamente!");
+        this.reset();
+      });
+  
+      // Inventario
+      document.getElementById("inventario-form").addEventListener("submit", function (e) {
+        e.preventDefault();
+        alert("¡Inventario guardado exitosamente!");
+        this.reset();
+      });
+  
+      // Cliente
+      document.getElementById("cliente-form").addEventListener("submit", function (e) {
+        e.preventDefault();
+        alert("¡Cliente guardado exitosamente!");
+        this.reset();
+      });
+  
+      // Devolución
+      document.getElementById("devolucion-form").addEventListener("submit", function (e) {
+        e.preventDefault();
+        alert("¡Devolución guardada exitosamente!");
+        this.reset();
+      });
+  
+      // Pedido
+      document.getElementById("pedido-form").addEventListener("submit", function (e) {
+        e.preventDefault();
+        alert("¡Pedido guardado exitosamente!");
+        this.reset();
+      });
+  
+      // Proveedor
+      document.getElementById("proveedor-form").addEventListener("submit", function (e) {
+        e.preventDefault();
+        alert("¡Proveedor guardado exitosamente!");
+        this.reset();
+      });
+    });
+  
     function cambiarPagina(idPagina) {
       const paginas = document.querySelectorAll('.page');
       paginas.forEach(pagina => pagina.classList.remove('active'));
       document.getElementById(idPagina).classList.add('active');
-
+  
       switch (idPagina) {
         case 'producto':
           obtenerProductos();
@@ -169,4 +228,179 @@
     }
   </script>
 </body>
+
+
 </html>
+<style>
+  body {
+  font-family: 'Roboto', Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f5f5f5;
+  color: #333;
+  line-height: 1.6;
+}
+
+h2 {
+  color: #2c3e50;
+  margin-bottom: 20px;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-size: 30px;
+}
+
+/* Navigation styles */
+nav {
+  background-color: #2c3e50;
+  padding: 10px 20px;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  border-bottom: 4px solid #3498db;
+}
+
+nav button {
+  background-color: #3498db;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  font-size: 1rem;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+nav button:hover {
+  background-color: #2980b9;
+  transform: translateY(-2px);
+}
+
+nav button:focus {
+  outline: none;
+  box-shadow: 0 0 5px #3498db;
+}
+
+/* Form styles */
+form {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  max-width: 600px;
+  margin: 20px auto;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+form input, form textarea, form button {
+  font-size: 1rem;
+}
+
+form input, form textarea {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  width: 95%;
+}
+
+form input:focus, form textarea:focus {
+  outline: none;
+  border-color: #3498db;
+  box-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
+}
+
+form textarea {
+  resize: none;
+  height: 100px;
+}
+
+form button {
+  background-color: #27ae60;
+  color: #fff;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+form button:hover {
+  background-color: #229954;
+}
+
+form button[type="button"] {
+  background-color: #e74c3c;
+}
+
+form button[type="button"]:hover {
+  background-color: #c0392b;
+}
+/* List container styles */
+#producto-list, #tienda-list, #inventario-list, #cliente-list, #devolucion-list, #pedido-list, #proveedor-list {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin: 20px auto;
+  max-width: 1000px;
+}
+
+/* List item styles */
+.list-item {
+  background-color: #ecf0f1;
+  padding: 10px;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  display: flex;
+  gap: 15px; /* Espaciado entre columnas */
+  align-items: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Column styles inside list item */
+.list-item .column {
+  flex: 1; /* Cada columna ocupa el mismo espacio */
+  text-align: left;
+}
+
+/* Column for buttons */
+.list-item .column.button-column {
+  flex: 0.3; /* Columna más pequeña para botones */
+  text-align: right;
+}
+
+/* Button styles */
+.list-item button {
+  background-color: #3498db;
+  color: #fff;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.list-item button:hover {
+  background-color: #2980b9;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  nav {
+    flex-wrap: wrap;
+    gap: 5px;
+  }
+
+  form {
+    padding: 15px;
+  }
+
+  nav button {
+    padding: 8px 15px;
+  }
+}
+</style>
