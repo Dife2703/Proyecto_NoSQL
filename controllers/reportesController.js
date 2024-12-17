@@ -3,6 +3,7 @@ const Pedido = require('../models/pedido');
 const Producto = require('../models/producto');
 const Tienda = require('../models/tienda');
 const Proveedor = require('../models/proveedor');
+const redis = require('../controllers/redisClient');
 
 // Reporte 1: Stock en la tienda
 exports.reporteInventario = async (req, res) => {
@@ -14,6 +15,15 @@ exports.reporteInventario = async (req, res) => {
       { $unwind: '$tienda' },
       { $project: { tienda: '$tienda.nombre', producto: '$producto.nombre', stock: '$cantidad' } },
     ]);
+
+    // Guardar reporte en Redis
+    const hashKey = 'reporte:inventario';
+    reporte.forEach((item, index) => {
+      redis.hmset(`${hashKey}:${index}`, item);
+    });
+
+
+
     res.json(reporte);
   } catch (error) {
     res.status(500).json({ error: 'Error al generar el reporte de inventario.' });
@@ -38,6 +48,15 @@ exports.reporteCostoInventario = async (req, res) => {
           },
         },
       ]);
+
+
+      // Guardar reporte en Redis
+      const hashKey = 'reporte:costoInventario';
+      costoInventario.forEach((item, index) => {
+      redis.hmset(`${hashKey}:${index}`, item);
+      });
+
+
   
       res.json(costoInventario);
     } catch (error) {
@@ -58,6 +77,17 @@ exports.reporteProductosVendidos = async (req, res) => {
       { $group: { _id: '$producto.nombre', cantidadVendida: { $sum: '$productos.cantidad' } } },
       { $project: { producto: '$_id', cantidadVendida: 1, _id: 0 } },
     ]);
+
+    // Guardar reporte en Redis
+    const hashKey = 'reporte:productosVendidos';
+    reporte.forEach((item, index) => {
+      redis.hmset(`${hashKey}:${index}`, item);
+    });
+
+
+
+
+
     res.json(reporte);
   } catch (error) {
     res.status(500).json({ error: 'Error al generar el reporte de productos vendidos.' });
@@ -88,6 +118,14 @@ exports.reporteProveedoresProductos = async (req, res) => {
           },
         },
       ]);
+
+      // Guardar reporte en Redis
+      const hashKey = 'reporte:proveedoresProductos';
+      reporteProveedores.forEach((item, index) => {
+      redis.hmset(`${hashKey}:${index}`, item);
+      });
+
+
   
       res.json(reporteProveedores);
     } catch (error) {
@@ -133,10 +171,34 @@ exports.reporteDisponibilidadProducto = async (req, res) => {
         if (!disponibilidadProducto || disponibilidadProducto.length === 0) {
           return res.status(404).json({ error: 'Producto no encontrado en ninguna tienda.' });
         }
+
+        // Guardar reporte en Redis
+        const hashKey = `reporte:disponibilidadProducto:${productoId}`;
+        disponibilidadProducto.forEach((item, index) => {
+        redis.hmset(`${hashKey}:${index}`, item);
+        });
     
         res.json(disponibilidadProducto);
       } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Error al generar el reporte de disponibilidad del producto.' });
       }
+  };
+
+  // Ruta para obtener un reporte desde Redis
+exports.obtenerReporteDesdeRedis = async (req, res) => {
+    try {
+      const { reporteTipo, id } = req.query;
+      const hashKey = `${reporteTipo}:${id}`;
+  
+      const reporte = await redis.hgetall(hashKey);
+  
+      if (!reporte || Object.keys(reporte).length === 0) {
+        return res.status(404).json({ error: 'Reporte no encontrado en Redis.' });
+      }
+  
+      res.json(reporte);
+    } catch (error) {
+      res.status(500).json({ error: 'Error al obtener el reporte desde Redis.' });
+    }
   };

@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const redis = require('./controllers/redisClient');
 
 
 const productoRoutes = require('./routes/producto');
@@ -26,6 +27,34 @@ mongoose.connect('mongodb+srv://ieioianos:lFrgKCVmmPxS58P8@cluster0.21kfo.mongod
 }).then(() => console.log('Conectado a MongoDB'))
 .catch(err => console.error('Error al conectar a MongoDB:', err));
 
+
+/*
+// Función que guarda los reportes en Redis al iniciar el servidor
+const almacenarReportesEnRedis = async () => {
+    try {
+      const inventario = await reportesController.reporteInventario();
+      const costoInventario = await reportesController.reporteCostoInventario();
+      const productosVendidos = await reportesController.reporteProductosVendidos();
+      const proveedoresProductos = await reportesController.reporteProveedoresProductos();
+      const disponibilidadProducto = await reportesController.reporteDisponibilidadProducto();
+  
+      // Almacenamos los resultados en Redis
+      redis.set('inventario', JSON.stringify(inventario));
+      redis.set('costoInventario', JSON.stringify(costoInventario));
+      redis.set('productosVendidos', JSON.stringify(productosVendidos));
+      redis.set('proveedoresProductos', JSON.stringify(proveedoresProductos));
+      redis.set('disponibilidadProducto', JSON.stringify(disponibilidadProducto));
+  
+      console.log('Reportes almacenados en Redis.');
+    } catch (error) {
+      console.error('Error al almacenar reportes en Redis:', error);
+    }
+  };*/
+  
+  
+  
+
+  
 // Rutas
 app.use('/api/productos', productoRoutes);
 app.use('/api/inventarios', inventarioRoutes);
@@ -35,7 +64,13 @@ app.use('/api/devoluciones', devolucionRoutes);
 app.use('/api/pedidos', pedidoRoutes);
 app.use('/api/proveedores', proveedorRoutes);
 app.use('/reportes', reportesRoutes);
+const reportesController = require('./controllers/reportesController');
 
 // Iniciar servidor
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Servidor escuchando en puerto ${PORT}`));
+// Llamamos a la función de almacenamiento de reportes **después de la configuración del servidor**
+app.listen(process.env.PORT || 3000, () => {
+    console.log(`Servidor escuchando en puerto ${process.env.PORT || 3000}`);
+  
+    // Después de iniciar el servidor, almacenamos los reportes en Redis
+    //almacenarReportesEnRedis();
+  });
