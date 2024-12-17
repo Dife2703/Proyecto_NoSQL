@@ -9,4 +9,3 @@ npm install express mongoose body-parser cors
 
 npm install ioredis
 
-npm install redis
