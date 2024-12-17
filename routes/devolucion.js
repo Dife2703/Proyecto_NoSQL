@@ -52,6 +52,21 @@ router.get('/:id', async (req, res) => {
   }
 });
 
+/*
+// Actualizar devolucion
+router.put('/:id', async (req, res) => {
+  try {
+    const devolucion = await Devolucion.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    if (!devolucion) return res.status(404).json({ error: 'Devolucion no encontrada' });
+    res.status(200).json(devolucion);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
+*/
+
+
+
 // Eliminar una devolución
 router.delete('/:id', async (req, res) => {
   try {
