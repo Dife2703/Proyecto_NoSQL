@@ -34,6 +34,18 @@ router.get('/:id', async (req, res) => {
   }
 });
 
+// Actualizar proovedor
+router.put('/:id', async (req, res) => {
+  try {
+    const proveedor = await Proveedor.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    if (!proveedor) return res.status(404).json({ error: 'Proveedor no encontrado' });
+    res.status(200).json(proveedor);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
+
 // Eliminar un proveedor
 router.delete('/:id', async (req, res) => {
   try {
