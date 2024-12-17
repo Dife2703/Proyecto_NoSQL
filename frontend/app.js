@@ -447,16 +447,21 @@ async function obtenerClientes() {
   //APARTADO DEVOLUCIONES
   // Obtener todas las devoluciones
 async function obtenerDevoluciones() {
+  
   const res = await fetch(`${apiUrl}/devoluciones`);
   const devoluciones = await res.json();
   const devolucionList = document.getElementById('devolucion-list');
   devolucionList.innerHTML = '';
 
   devoluciones.forEach(devolucion => {
+
+    const pedidoId = devolucion.pedidoId._id;
+    //devolucion.pedidoId
     const div = document.createElement('div');
     div.classList.add('list-item');
     div.innerHTML = `
       Pedido ID: ${devolucion.pedidoId} | Motivo: ${devolucion.motivo} | Cantidad: ${devolucion.cantidad}
+      Pedido ID: ${pedidoId} | Motivo: ${devolucion.motivo} | Cantidad: ${devolucion.cantidad}
       <button onclick="eliminarDevolucion('${devolucion._id}')">Eliminar</button>
       <button onclick="cargarDevolucion('${devolucion._id}')">Editar</button>
     `;

@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 
+
 const productoRoutes = require('./routes/producto');
 const inventarioRoutes = require('./routes/inventario');
 const tiendaRoutes = require('./routes/tienda');
@@ -10,6 +11,7 @@ const clienteRoutes = require('./routes/cliente');
 const devolucionRoutes = require('./routes/devolucion');
 const pedidoRoutes = require('./routes/pedido');
 const proveedorRoutes = require('./routes/proveedor');
+const reportesRoutes = require('./routes/reportes');
 
 const app = express();
 
@@ -32,6 +34,7 @@ app.use('/api/clientes', clienteRoutes);
 app.use('/api/devoluciones', devolucionRoutes);
 app.use('/api/pedidos', pedidoRoutes);
 app.use('/api/proveedores', proveedorRoutes);
+app.use('/reportes', reportesRoutes);
 
 // Iniciar servidor
 const PORT = process.env.PORT || 3000;
