@@ -519,24 +519,44 @@ async function eliminarDevolucion(id) {
 
 // APARTADO DE PEDIDOS
 
+
+// Obtener todos los pedidos
 // Obtener todos los pedidos
 async function obtenerPedidos() {
-  const res = await fetch(`${apiUrl}/pedidos`);
-  const pedidos = await res.json();
-  const pedidoList = document.getElementById('pedido-list');
-  pedidoList.innerHTML = '';
+  try {
+    const res = await fetch(`${apiUrl}/pedidos`);
+    if (!res.ok) throw new Error('Error al obtener los pedidos');
 
-  pedidos.forEach(pedido => {
-    const div = document.createElement('div');
-    div.classList.add('list-item');
-    div.innerHTML = `
-      Cliente: ${pedido.clienteId.nombre} | Productos: ${pedido.productos.map(p => `${p.productoId.nombre} (Cantidad: ${p.cantidad})`).join(', ')}
-      <button onclick="eliminarPedido('${pedido._id}')">Eliminar</button>
-      <button onclick="cargarPedido('${pedido._id}')">Editar</button>
-    `;
-    pedidoList.appendChild(div);
-  });
+    const pedidos = await res.json();
+    console.log(pedidos); // Verifica qué devuelve la API
+
+    const pedidoList = document.getElementById('pedido-list');
+    pedidoList.innerHTML = ''; // Limpia la lista antes de agregar los elementos
+
+    if (Array.isArray(pedidos) && pedidos.length > 0) {
+      pedidos.forEach(pedido => {
+        const clienteNombre = pedido.clienteId?.nombre || 'Desconocido';
+        const productos = pedido.productos
+          ?.map(p => `${p.productoId?.nombre || 'Producto desconocido'} (Cantidad: ${p.cantidad || 0})`)
+          .join(', ') || 'Sin productos';
+
+        const div = document.createElement('div');
+        div.classList.add('list-item');
+        div.innerHTML = `
+          Cliente: ${clienteNombre} | Productos: ${productos}
+          <button onclick="eliminarPedido('${pedido._id}')">Eliminar</button>
+          <button onclick="cargarPedido('${pedido._id}')">Editar</button>
+        `;
+        pedidoList.appendChild(div);
+      });
+    } else {
+      pedidoList.innerHTML = '<p>No hay pedidos disponibles.</p>';
+    }
+  } catch (error) {
+    console.error('Error al obtener pedidos:', error);
+  }
 }
+
 
 // Crear / Editar Pedido
 
