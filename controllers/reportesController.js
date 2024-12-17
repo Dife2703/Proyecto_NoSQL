@@ -106,24 +106,33 @@ exports.reporteDisponibilidadProducto = async (req, res) => {
           return res.status(400).json({ error: 'El ID del producto es requerido.' });
         }
     
+        // Verificar que el productoId es un ObjectId válido
+        if (!mongoose.Types.ObjectId.isValid(productoId)) {
+          return res.status(400).json({ error: 'El ID del producto no es válido.' });
+        }
+    
         const disponibilidadProducto = await Tienda.aggregate([
           {
-            $unwind: '$productos', // Desglosar los productos dentro de cada tienda
+            $unwind: '$productos',  // Desglosar el array de productos dentro de cada tienda
           },
           {
             $match: {
-              'productos._id': new mongoose.Types.ObjectId(productoId), // Filtrar por el ID del producto
+              'productos._id': new mongoose.Types.ObjectId(productoId),  // Filtrar por el _id del producto
             },
           },
           {
             $project: {
-              tienda: '$nombre', // Nombre de la tienda
-              ciudad: '$ciudad', // Ciudad de la tienda
-              producto: '$productos.nombre', // Nombre del producto
-              stock: '$productos.stock', // Stock disponible del producto
+              tienda: '$nombre',  // Nombre de la tienda
+              ciudad: '$ciudad',  // Ciudad de la tienda
+              producto: '$productos.nombre',  // Nombre del producto
+              stock: '$productos.stock',  // Stock disponible en la tienda
             },
           },
         ]);
+    
+        if (!disponibilidadProducto || disponibilidadProducto.length === 0) {
+          return res.status(404).json({ error: 'Producto no encontrado en ninguna tienda.' });
+        }
     
         res.json(disponibilidadProducto);
       } catch (error) {
